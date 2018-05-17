@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+         Function.prototype.before = function (beforFn) {
+               console.log(222)
+               console.log(this)
+               beforFn();
+            }
+         let doSomething = function () {
+               
+                console.log(1);
+            }
+            doSomething.a=22
+        // doSomething.before(()=>{
+        //     console.log(111)
+        //     console.log(this)
+        // });
+        let a=function(){
+            console.log(this)
+        }
+        doSomething.before(a);
+    </script>
+</body>
+</html>

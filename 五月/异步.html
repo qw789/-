@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var start = new Date();
+            setTimeout(function () {
+                var current = new Date();
+                var dvalue = current - start;
+                alert(dvalue + 'ms');
+            }, 500);
+            while (new Date() - start < 1000) {
+                console.log(22)
+            }
+    </script>
+</body>
+</html>

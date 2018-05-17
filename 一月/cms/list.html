@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>充电点</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+</head>
+
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="(!addStation)&&(!addGroup)">
+        <button class="btn btn-primary" @click="addStations()" style="position:fixed;right:10px;top:0;z-index:2" v-show="!tenantId">
+            <i class="fa fa-plus"></i>&nbsp添加
+        </button>
+        <div class="row" style="border:0;">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs pull-left" style="font-weight:700;width:100%;">
+                    <li role="presentation" v-for="(item,index) in list" @click="selected(index,item)" :class="{active: activeName == index}">
+                        <a href="#" :id="item.id">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <transition-group name="fade">
+            <div class="main-list" v-for="(item,index) in list" v-show="activeName==index" :key="index">
+                <div class="panel panel-default" style="margin-top:10px;">
+                    <div class="panel-heading" style="height:50px;">
+                        <span>基础信息</span>
+                        <!--<div class="pull-right">-->
+                        <!--<button class="btn btn-primary pack-up" @click="packUp()" ref="pack">收起</button>-->
+                        <!--<button class="btn btn-primary pack-down" @click="packDown()" ref="down">展开</button>-->
+                        <!--</div>-->
+                    </div>
+                    <div style="padding: 10px 0 10px 10px;">
+                        <div class="station">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered station-table table-hover">
+                                        <tr>
+                                            <td>编号</td>
+                                            <td>{{item.number}}</td>
+                                            <td>位置</td>
+                                            <td>{{item.address}}</td>
+                                            <td>地址</td>
+                                            <td>{{item.address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>状态</td>
+                                            <td>{{item.state|ifUsing}}</td>
+                                            <td>维护人</td>
+                                            <td>{{item.maintainer}}</td>
+                                            <td>维护人电话</td>
+                                            <td>{{item.phone}}</td>
+                                        </tr>
+                                        <!-- <tr v-for="timeItem in item.time">
+                                            <td>峰时段</td>
+                                            <td>{{timeItem.peakTime}}</td>
+                                            <td>平时段</td>
+                                            <td>{{timeItem.usuallyTime}}</td>
+                                            <td>谷时段</td>
+                                            <td>{{timeItem.valleyTime}}</td>
+                                        </tr> -->
+                                        <tr>
+                                            <td>峰价</td>
+                                            <td class="text-center">{{item.peak|returnFloat}}元</td>
+                                            <td>平价</td>
+                                            <td class="text-center">{{item.usually|returnFloat}}元</td>
+                                            <td>谷价</td>
+                                            <td class="text-center">{{item.valley|returnFloat}}元</td>
+                                        </tr>
+                                        <tr>
+                                            <td>服务费</td>
+                                            <td class="text-center">{{item.service|returnFloat}}元</td>
+                                            <td>录入人</td>
+                                            <td>{{item.createName}}</td>
+                                            <td>创建时间</td>
+                                            <td>{{item.created}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="station">
+                                <div style="margin-top:10px;" v-show="!tenantId">
+                                    <button class="btn btn-primary" @click="enable(item)" :disabled="item.state==1" :class="{diState:item.state===1}">
+                                        <i class="fa fa-plus"></i>&nbsp启用
+                                    </button>
+                                    <button class="btn btn-primary" @click="disable(item)" :disabled="item.state==2" :class="{diState:item.state===2}">
+                                        <i class="fa fa-remove"></i>&nbsp停用
+                                    </button>
+                                    <button class="btn btn-primary" @click="upDate(item)">
+                                        <i class="fa fa-pencil-square-o"></i>&nbsp编辑
+                                    </button>
+                                    <button class="btn btn-primary" @click="del(index,item)">
+                                        <i class="fa fa-trash-o"></i> &nbsp删除
+                                    </button>
+                                    <button class="btn btn-primary" @click="upDateRate(item)">
+                                        <i class="fa fa-trash-o"></i>&nbsp 同步费率
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row analyze">
+                    <div class="col-md-4">
+                        <div class="total">{{item.totalElectricity}}</div>
+                        <div>充电量（kWh)</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="total">{{item.totalUse}}</div>
+                        <div>充电服务（次）</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="total">{{item.totalConsume}}</div>
+                        <div>营业额（元）</div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="height:50px;">
+                        <div class="pull-left">
+                            电桩列表
+                        </div>
+                        <div class="pull-right" v-show="!tenantId">
+                            <button class="btn btn-primary" @click="addGroups()">
+                                <i class="fa fa-plus"></i>&nbsp添加
+                            </button>
+                        </div>
+                    </div>
+                    <div style="padding: 10px 0 20px 10px;">
+                        <form class="form-inline form-style">
+                            <div class="form-group" style="margin-right:100px;">
+                                <label for="">桩编号</label>
+                                <input type="text" class="form-control" placeholder="桩编号" v-model="pileNumber">
+                            </div>
+                            <div class="form-group" style="margin-right:100px;">
+                                <label for="">型号</label>
+                                <select class="form-control" v-model="pilemodelId">
+                                    <option value="0">全部</option>
+                                    <option v-for="item in modelList" :value="item.id">{{item.modelNumber}}</option>
+                                </select>
+                            </div>
+                            <!--<div class="form-group">-->
+                            <!--<label for="">分组</label>-->
+                            <!--<select class="form-control" v-model="pilegroupId">-->
+                            <!--<option value="0">请选择分组</option>-->
+                            <!--<option>1</option>-->
+                            <!--<option>2</option>-->
+                            <!--<option>3</option>-->
+                            <!--<option>4</option>-->
+                            <!--<option>5</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
+                            <div class="form-group" style="margin-left:20px;">
+                                <button class="btn btn-primary" type="button" @click="searchPile()">
+                                    查询
+                                </button>
+                            </div>
+                        </form>
+                        <div class="list-main cle">
+                            <ul class="status">
+                                <li id="status" @click="changeStatus($event)" style="border:1px solid blue">
+                                    <div>
+                                        <a>
+                                            <img src="${request.contextPath}/statics/images/总共.png" alt="">
+                                            <span class="text-form">
+                                                <div class="font-20 color-blue">
+                                                    {{pileLists.total}}
+                                                </div>
+                                                <div>
+                                                    总共
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li id="status0" @click="changeStatus($event)">
+                                    <div>
+                                        <a>
+                                            <img src="${request.contextPath}/statics/images/空闲.png" alt="">
+                                            <span class="text-form">
+                                                <div class="font-20 color-blue">
+                                                    {{ pileLists.free}}
+                                                </div>
+                                                <div>
+                                                    空闲
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li id="status2" @click="changeStatus($event)">
+                                    <div>
+                                        <a>
+                                            <img src="${request.contextPath}/statics/images/充电中.png" alt="">
+                                            <span class="text-form">
+                                                <div class="font-20 color-blue">
+                                                    {{pileLists.charging}}
+                                                </div>
+                                                <div>
+                                                    充电中
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li id="status5" @click="changeStatus($event)">
+                                    <div>
+                                        <a>
+                                            <img src="${request.contextPath}/statics/images/锁定.png" alt="">
+                                            <span class="text-form">
+                                                <div class="font-20 color-blue">
+                                                    {{pileLists.lock}}
+                                                </div>
+                                                <div>
+                                                    锁定
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li id="status1" @click="changeStatus($event)">
+                                    <div>
+                                        <a>
+                                            <img src="${request.contextPath}/statics/images/占用.png" alt="">
+                                            <span class="text-form">
+                                                <div class="font-20 color-blue">
+                                                    {{pileLists.occupy}}
+                                                </div>
+                                                <div>
+                                                    占用
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="width-50" id="status4" @click="changeStatus($event)">
+                                    <a>
+                                        <span>
+                                            <div>{{pileLists.fault}}</div>
+                                            <div>
+                                                <img src="${request.contextPath}/statics/images/fail.png" alt="">
+                                            </div>
+                                            <div>故障</div>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="width-50" id="status3" @click="changeStatus($event)">
+                                    <a>
+                                        <span>
+                                            <div>{{pileLists.disable}}</div>
+                                            <div>
+                                                <img src="${request.contextPath}/statics/images/abandon.png" alt="">
+                                            </div>
+                                            <div>禁用</div>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="width-50" id="status6" @click="changeStatus($event)">
+                                    <a>
+                                        <span>
+                                            <div>{{pileLists.notConnect}}</div>
+                                            <div>
+                                                <img src="${request.contextPath}/statics/images/notconnect.png" alt="">
+                                            </div>
+                                            <div>未连接</div>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="list2-main">
+                            <ul class="status2 cle" style="padding-bottom:80px;">
+                                <li v-for="(item,index) in pileLists.pileList" :class="{status2hover: styShow===index}" @mouseenter="toggleShow(index,item)"
+                                    @mouseleave="toggleHide(index,item)" @click="goDetail(item)">
+                                    <a href="javascript:;">
+                                        <div>
+                                            <img :src="item.status|toImg" alt="">
+                                            <div>
+                                                {{item.addr}}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="xszimg" :class="{show:xsShow===index}">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                桩编码
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.pileNumber}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                客户名
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.customerName}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                电压
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.voltage}}V
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                客户编号
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.customerNumber}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                电流
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.current}}A
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                起始时间
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.startTime}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                功率
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.power}}KW
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                充电时间
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.duration}}分钟
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                电量
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.quantity}}kW
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                消费金额
+                                            </div>
+                                            <div class="col-md-8">
+                                                {{onChargeInfo.price}}元
+                                            </div>
+                                        </div>
+                                        <div style="position:absolute;bottom:-20px;">
+                                            <img src="${request.contextPath}/statics/images/bubble-tail2.png" alt="">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition-group>
+    </div>
+    <!-- 添加编辑充点电 -->
+    <div v-show="addStation">
+        <div class="page-header">
+            <h3>
+                添加充电点
+            </h3>
+        </div>
+        <div class="add-station">
+            <div class="grid-btn station-center">
+                <div class="form-group">
+                    <label for="">编号</label>
+                    <input type="text" class="form-control" v-model="q.number" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="">名称</label>
+                    <input type="text" class="form-control" v-model="q.name" placeholder="请输入名称">
+                </div>
+                <div class="form-group">
+                    <label for="">地址</label>
+                    <textarea name="" id="" cols="30" v-model="q.address" rows="5" placeholder="请输入具体地址"></textarea>
+                </div>
+                <!--<div class="form-group">-->
+                <!--<label for="">位置</label>-->
+                <!--<input id="beginTime" type="text" v-model="q.phone" class="form-control"  placeholder="请选择位置" readonly="readonly"-->
+                <!--/>-->
+                <!--</div>-->
+                <div class="form-group">
+                    <label for="">峰价</label>
+                    <input type="text" v-model="q.peak" class="form-control" placeholder="请输入峰价" />
+                </div>
+                <div class="form-group">
+                    <label for="">平价</label>
+                    <input type="text" v-model="q.usually" class="form-control" placeholder="请输入平价" />
+                </div>
+                <div class="form-group">
+                    <label for="">谷价</label>
+                    <input type="text" v-model="q.valley" class="form-control" placeholder="请输入谷价" />
+                </div>
+                <div class="form-group">
+                    <label for="">服务费</label>
+                    <input type="text" v-model="q.service" class="form-control" placeholder="请输入服务费" />
+                </div>
+                <!-- <div v-for="list in q.time">
+                    <div class="form-group">
+                        <label for="">峰时段</label>
+                        <el-time-picker is-range v-model="list.peakTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+                    <div class="form-group">
+                        <label for="">平时段</label>
+                        <el-time-picker is-range v-model="list.usuallyTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+                    <div class="form-group">
+                        <label for="">谷时段</label>
+                        <el-time-picker is-range v-model="list.valleyTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
+                        </el-time-picker>
+                    </div>
+                </div> -->
+                <div class="form-group">
+                    <label for="">维护人</label>
+                    <input type="text" v-model="q.maintainer" class="form-control" placeholder="请输入维护人" />
+                </div>
+                <div class="form-group">
+                    <label for="">维护人电话</label>
+                    <input type="text" v-model="q.phone" class="form-control" placeholder="请输入维护人电话" />
+                </div>
+                <div class="form-group">
+                    <label for="ccc">
+                        启用状态
+                    </label>
+                    <input id="ccc" class="mui-switch" type="checkbox" v-model="q.state" />
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" @click="saveOrUpdate()">
+                        提交
+                    </button>
+                    <button type="button" class="btn btn-primary" @click="closeModel1()">
+                        返回
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加编辑充电桩 -->
+    <div v-show="addGroup">
+        <div class="page-header">
+            <h3>
+                添加充电桩
+            </h3>
+        </div>
+        <div class="add-station">
+            <div class="grid-btn station-center">
+                <!--<div class="form-group">-->
+                <!--<label for="">编号</label>-->
+                <!--<span>CG430120-005-02-</span>-->
+                <!--<input type="text" class="form-control" style='width:116px;' v-model="g.number" readonly>-->
+                <!--</div>-->
+                <div class="form-group">
+                    <label for="">名称</label>
+                    <input type="text" placeholder="请输入名称" class="form-control" v-model="g.name" />
+                </div>
+                <div class="form-group">
+                    <label for="">安装位置</label>
+                    <input type="text" placeholder="请输入安装位置" class="form-control" v-model="g.position" />
+                </div>
+                <div class="form-group">
+                    <label for="">型号</label>
+                    <!--<input id="endTime" type="text" class="form-control" v-model="g.modelId" />-->
+                    <select class="form-control" v-model="g.modelId">
+                        <option value="0">全部</option>
+                        <option v-for="item in modelList" :value="item.id">{{item.modelNumber}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">机器码</label>
+                    <input type="text" class="form-control" placeholder="请输入机器码" v-model="g.machineCode" />
+                </div>
+                <div class="form-group">
+                    <label for="">地址码</label>
+                    <input type="text" class="form-control" placeholder="请输入地址码" v-model="g.addr" />
+                </div>
+                <div class="form-group">
+                    <label for="">描述</label>
+                    <textarea name="" cols="30" v-model="g.remark" rows="5" placeholder="请输入"></textarea>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" @click="saveOrUpdateGroup()">
+                        提交
+                    </button>
+                    <button class="btn btn-primary" @click="closeModel2()">
+                        后退
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/element-ui@2.0.11/lib/index.js"></script>
+    <script src="js/list.js"></script>
+</body>
+
+</html>

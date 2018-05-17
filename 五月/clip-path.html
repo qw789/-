@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="x-ua-compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        body{
+            margin:0;
+            background-color: #efefef;
+        }
+        .con{
+            -webkit-clip-path: ellipse(100% 20% at 50% 45%);
+            clip-path: ellipse(100% 20% at 50% 45%);
+            background: url("https://sdk.appadhoc.com/h5editor-images/aa2d41ab-99f9-67ed-416d-2f8d1525671093099")
+                        no-repeat center ;
+            position: absolute;
+            width:100vw;
+            left:0;
+        }
+        .other_container{
+            box-sizing: border-box;
+            padding:5px 10px;
+            margin:0 10px;
+            border-radius: 10px;
+            background-color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="con" id="container"></div>
+    <div class="other_container" id="or_container">
+        上面是一个弧形的,上面是一个弧形的,上面是一个弧形的,上面是一个弧形的,上面是一个弧形的
+    </div>
+    <script>
+        let rate=130/231; //计算图片的宽高比率
+        let img_height= 100 * rate; //计算图片的响应高度
+        let con_height=img_height / 0.4; //计算容器的高度
+        container.style.height=con_height + 'vw';
+        container.style.backgroundSize='100vw '+img_height + 'vw';
+        container.style.top='-'+(img_height * 14/18 )+ 'vw';
+        or_container.style.marginTop=(img_height * 88/100 )+ 'vw';
+    </script>
+</body>
+</html>

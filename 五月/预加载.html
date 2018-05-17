@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function show() { alert("body is loaded"); };
+            window.onload = show;  
+        var img = new Image();
+            img.onload = function () { alert("img is loaded") };
+            img.onerror = function () { alert("error!") };
+            img.src = "https://t10.baidu.com/it/u=3586316196,911245886&fm=173&app=25&f=JPEG?w=599&h=313&s=4D5009C70C1439D440F10C3803008012";
+            
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>充电订单</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+</head>
+
+<body>
+<div id="rrapp">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                <span>充电订单</span>
+                <span class="pull-right">
+                    <button class="btn btn-success">导出</button>
+                    <button class="btn btn-success" @click="goBack()">返回</button>
+                </span>
+            </h3>
+        </div>
+        <div class="wrap-order">
+            <form class="form-inline order-form">
+                <div class="form-group">
+                    <label for="">订单编号</label>
+                    <input type="text" class="form-control" v-model="records.number">
+                </div>
+                <div class="form-group">
+                    <label for="">客户手机号</label>
+                    <input type="email" class="form-control" v-model="records.customerPhone">
+                </div>
+                <div class="form-group">
+                    <label for="">桩编号</label>
+                    <input type="email" class="form-control" v-model="records.pileNumber">
+                </div>
+            </form>
+            <form class="form-inline order-form">
+                <div class="form-group">
+                    <label for="">充点电</label>
+                    <input type="text" class="form-control" v-model="records.stationId">
+                </div>
+                <div class="form-group">
+                    <label for="">起始日期</label>
+                    <!--<input type="email" class="form-control" v-model="records.beginTime">-->
+                    <el-date-picker v-model="records.beginTime" type="date" placeholder="选择日期">
+                    </el-date-picker>
+                </div>
+                <div class="form-group">
+                    <label for="">结束日期</label>
+                    <!--<input type="email" class="form-control" v-model="records.endTime">-->
+                    <el-date-picker v-model="records.endTime" type="date" placeholder="选择日期">
+                    </el-date-picker>
+                </div>
+            </form>
+            <form class="form-inline order-form">
+                <!-- <div class="form-group">
+                    <label for="">状态</label>
+                    <button class="btn btn-success">
+                        全部
+                    </button>
+                    <button class="btn btn-success">
+                        已完成
+                    </button>
+                    <button class="btn btn-success">
+                        待结算
+                    </button>
+                    <button class="btn btn-success">
+                        进行中
+                    </button>
+                    <button class="btn btn-success">
+                        中止
+                    </button>
+                </div> -->
+                <div class="form-group pull-right">
+                    <button class="btn btn-success" type="button" @click="recordList()">
+                        查询
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div style="padding:10px 15px;">
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <td>订单编号</td>
+                    <td>客户手机</td>
+                    <td>客户名称</td>
+                    <td>充电点</td>
+                    <td>桩编号</td>
+                    <td>结束原因</td>
+                    <td>电量</td>
+                    <td>开始时间</td>
+                    <td>时长</td>
+                    <td>峰电量</td>
+                    <td>平电量</td>
+                    <td>谷电量</td>
+                    <td>峰价</td>
+                    <td>平价</td>
+                    <td>谷价</td>
+                    <td>服务费</td>
+                    <td>订单金额</td>
+                    <td>状态</td>
+                
+                </tr>
+                <tr v-for="item in lists">
+                    <td class="text-center">{{item.number}}</td>
+                    <td class="text-center">{{item.customerPhone}}</td>
+                    <td class="text-center">{{item.customerName}}</td>
+                    <td class="text-center">{{item.stationName}}</td>
+                    <td class="text-center">{{item.pileNumber}}</td>
+                    <td class="text-center">{{item.endType}}</td>
+                    <td class="text-center">{{item.carElectricity}}</td>
+                    <td class="text-center">{{item.start}}</td>
+                    <td class="text-center">{{item.duration}}</td>
+                    <td class="text-right">{{item.peakEle}}</td>
+                    <td class="text-right">{{item.usuallyEle}}</td>
+                    <td class="text-right">{{item.valleyEle}}</td>
+                    <td class="text-right">{{item.peakPrice}}</td>
+                    <td class="text-right">{{item.usuallyPrice}}</td>
+                    <td class="text-right">{{item.valleyPrice}}</td>
+                    <td class="text-right">{{item.service}}</td>
+                    <td class="text-right">{{item.consume}}</td>
+                    <td class="text-center">{{item.deleteState}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

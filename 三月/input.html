@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        input{
+            display: inline-block;
+            outline: none;
+            border: 0px;
+        }
+        div{
+            width:400px;
+            height: 50px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span>
+            +86
+        </span><input type="text">
+    </div>
+    <div>
+        <span>
+            +86
+        </span>
+        <input type="text">
+    </div>
+    <script>
+        var promise = function (isReady) {
+                return new Promise(function (resolve, reject) {
+                    // do somthing, maybe async
+                    if (isReady) {
+                        return resolve('hello world');
+                    } else {
+                        return reject('failure');
+                    }
+                });
+            }
+            promise(true)
+                .then(function (value) {
+                    console.log('resolved');
+                    console.log(value);
+                    console.log(haha); //此处的haha未定义
+                },function (error) {
+                    console.log(error);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    // console.log('rejected');
+                });
+                //不写catch的话只会执行then,错误报不出来。上一把的错误下一把报
+    </script>
+</body>
+</html>

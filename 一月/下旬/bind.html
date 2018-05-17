@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Bloomer() {
+                this.petalCount = Math.ceil(Math.random() * 12) + 1;
+            }
+
+            // 1秒后调用declare函数
+            Bloomer.prototype.bloom = function () {
+                // console.log(this)
+                window.setTimeout(this.declare.bind(this), 1000);
+            };
+            function bar() {
+                console.log(this)
+            }
+            Bloomer.prototype.declare = function () {
+                console.log(this)
+                console.log('我有 ' + this.petalCount + ' 朵花瓣!');
+            };
+    var test=new Bloomer();
+    test.bloom();
+    // var bar={test1:function(){console.log(this)},test2:function(){},a:1}
+    // bar.test1()
+    // console.log(bar.a)
+    </script>
+</body>
+</html>

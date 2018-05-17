@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   <script>
+    //    const numbers=[10,20,30,40];
+    //    const doubledOver50=numbers.reduce((finalList,num)=>{
+    //        num=num*2;
+    //        if(num>50){
+    //          finalList.push(num)
+    //        }
+    //        return finalList;
+    //    },[])
+    //    console.log(doubledOver50)
+       var i = 0;
+       var hasdata=false;
+       function a(){
+           i++;
+           console.log(i)
+           if(hasdata==false){
+               hasdata=true;
+            //    clearInterval(timer);
+               timer = setInterval(a, 1000);
+           }
+              
+       }
+    //    var c=setInterval(a,2000)
+       a();       
+
+
+    // document.onclick = function () {
+    //     //这里this是document
+    //         console.log(this)
+    //     }
+    // document.onclick = ()=>{
+    //     //这里this是window
+    //     console.log(this)
+    // }
+
+
+    var handler = {
+            id: '123456',
+
+            init: function () {
+                document.addEventListener('click',
+                    event => {this.doSomething(event.type);console.log(this)}, false);
+            },
+
+            doSomething: function (type) {
+                console.log('Handling ' + type + ' for ' + this.id);
+            }
+        };
+        handler.init();
+var id=200;
+//     function foo() {
+//         setTimeout(() => {
+//             console.log('id:', this.id);
+//         }, 100);
+//     }
+ foo();
+
+ function foo() {
+
+        setTimeout(function () {
+            console.log('id:', this.id);
+        }, 100);
+    }
+
+
+    function foo() {
+            setTimeout(() => {
+                console.log('args:', arguments);
+            }, 100);
+        }
+foo(2222,222)
+   </script> 
+</body>
+</html>

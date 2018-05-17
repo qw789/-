@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        测试
+    </div>
+    <script src="jquery-1.8.3.min.js">
+        
+    </script>
+    <script>
+        var j=
+        $(document).ready(function () {
+            var j={
+                 "hour": 11,
+                "minute": 11,
+                "stationId": 48
+            }
+             $.ajax({
+                    url: 'http://172.16.0.194:8766/charge/getChargeFeeTimeEntity',
+                    data: JSON.stringify(j),
+                    type: 'post',
+                    dataType: 'json',
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    success:function(ele){
+                        console.log(ele)
+                    }
+                })
+            
+         });
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>电桩详情</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+</head>
+
+<body>
+<div id="rrapp">
+    <div class="page-header">
+        <h3>
+            <span>电桩详情</span>
+            <span class="pull-right">
+                <button type="button" class="btn btn-primary" @click="goBack()">返回</button>
+            </span>
+        </h3>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                <span>电桩信息</span>
+                <span class="pull-right">
+                    <button class="btn btn-primary">开充</button>
+                    <button class="btn btn-primary">停充</button>
+                    <button class="btn btn-primary">启用</button>
+                    <button class="btn btn-primary">停用</button>
+                    <button class="btn btn-primary">编辑</button>
+                    <button class="btn btn-primary">调试</button>
+                    <button class="btn btn-primary">删除</button>
+                </span>
+            </h3>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <td>编号</td>
+                <td>{{chargeDetail.number}}</td>
+                <td>型号</td>
+                <td>{{chargeDetail.modelId}}</td>
+                <td>服务费</td>
+                <td>GTIAC7KW</td>
+            </tr>
+            <tr>
+                <td>名称</td>
+                <td>{{chargeDetail.name}}</td>
+                <td>机器码</td>
+                <td>{{chargeDetail.machineCode}}</td>
+                <td>平价</td>
+                <td>{{chargeDetail.usually}}</td>
+            </tr>
+            <tr>
+                <td>分组</td>
+                <td>{{chargeDetail.groups}}</td>
+                <td>地址码</td>
+                <td>{{chargeDetail.addr}}</td>
+                <td>谷价</td>
+                <td>{{chargeDetail.valley}}</td>
+            </tr>
+            <tr>
+                <td>安装位置</td>
+                <td>{{chargeDetail.position}}</td>
+                <td>电压等级</td>
+                <td>{{chargeDetail.voltage}}</td>
+                <td>峰价</td>
+                <td>{{chargeDetail.peak}}</td>
+            </tr>
+            <tr>
+                <td>类型</td>
+                <td>{{chargeDetail.pileType|}}</td>
+                <td>电流等级</td>
+                <td>{{chargeDetail.current}}</td>
+                <td>停车费</td>
+                <td>{{chargeDetail.parking}}</td>
+            </tr>
+            <tr>
+                <td>描述</td>
+                <td>{{chargeDetail.remark}}</td>
+                <td>功率</td>
+                <td>{{chargeDetail.power}}</td>
+                <td>服务费</td>
+                <td>{{chargeDetail.extraCharge}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                电桩数据
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div>
+                <span>
+                    状态控制
+                </span>
+                <span class="pull-right">
+                    更新时间
+                </span>
+            </div>
+            <div class="wrap-status">
+                <div class="pull-left stationStatus" style="border:1px solid #ccc;">
+                    <div class="flex-center" style="height:110px;">
+                        <img src="${request.contextPath}/statics/images/u801.png" alt="" width="93px">
+                    </div>
+                    <div class="stationBottom">
+                        充电中
+                    </div>
+                </div>
+                <table class="table table-bordered pull-left stationTable">
+                    <tr>
+                        <td>编号</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>型号</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>服务费</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td>名称</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>机器码</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>平价</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td>分组</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>地址码</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>谷价</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td>安装位置</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>电压等级</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                        <td>峰价</td>
+                        <td>{{onChargeInfo.pileNumber}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <div class="flex-center pull-left u780div">
+                    <img src="${request.contextPath}/statics/images/u780.png" alt="">
+                </div>
+                <div class="flex-center pull-left rightdiv" style="border:1px solid #ccc">
+                    <div>
+                        <div>{{chargeDetail.totalUse}}</div>
+                        <div>
+                            充电服务（次）
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-center pull-left u780div u770div" style="margin-left:50px;">
+                    <img src="${request.contextPath}/statics/images/u277.png" alt="">
+                </div>
+                <div class="flex-center pull-left rightdiv" style="border:1px solid #ccc">
+                    <div>
+                        <div>{{chargeDetail.totalElectricity}}</div>
+                        <div>
+                            总充电量（kwh）
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- <script src='js/pileDetail.js'> -->
+    </script>
+</body>
+
+</html>

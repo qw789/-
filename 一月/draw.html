@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+ 
+<canvas id="myCanvas" width="300" height="550" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+ 
+<input type="text" id="angle_v" readonly="1"/>
+<script>
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+var angle=10;
+var angle_now = 0;
+ 
+myRotate()
+ 
+function myRotate()
+{
+  ctx.clearRect(0,0, c.width, c.height);//x2 是为了把原来的图全部抹掉（不留下痕迹）
+  ctx.translate(c.width/2,c.height/2);
+
+  ctx.rotate(angle*Math.PI/180);
+  ctx.translate(-c.width/2,-c.height/2);
+  ctx.strokeStyle = "#1c86d1";
+  ctx.beginPath();
+   ctx.arc(100,100,200,0,Math.PI);
+  ctx.closePath();
+  ctx.stroke();
+
+  ctx.strokeStyle = "#fff";
+  ctx.arc(100,100,200,Math.PI,2*Math.PI);
+  ctx.closePath();
+
+  ctx.stroke();
+  angle_now= (angle_now + angle)%360;
+  document.getElementById("angle_v").value="当前角度:"+angle_now;
+  setTimeout(myRotate,1000);
+}
+ 
+</script>
+ 
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>throttle</title>
+</head>
+
+<body>
+    <div style="height:5000px">
+        <div id="demo" style="position:fixed;"></div>
+    </div>
+    <script>
+        var COUNT = 0, demo = document.getElementById('demo');
+        function testFn() { demo.innerHTML += 'testFN 被调用了 ' + ++COUNT + '次<br>'; }
+
+        var throttle = function (fn, delay, atleast) {
+            var timer = null;
+            var previous = null;
+
+            return function () {
+                var now = +new Date();
+
+                if (!previous) {previous = now;};
+                    console.log(now - previous)
+                if (atleast && now - previous > atleast) {
+                    fn();
+                    // 重置上一次开始时间为本次结束时间
+                    previous = now;
+                    console.log("cccccc"+timer)
+                    clearTimeout(timer);
+                } else {
+                     console.log("dd" + timer)
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        fn();
+                        previous = null;
+                    }, delay);
+                     console.log("ee" + timer)
+                }
+            }
+        };
+
+        // window.onscroll = throttle(testFn, 200);
+    window.onscroll = throttle(testFn, 200, 200);
+        // var timer = null;
+        // window.onscroll = function () {
+        //     console.log("cc"+timer)
+        //     clearTimeout(timer);
+            
+        //     timer = setTimeout(function () {
+        //         testFn();
+        //     }, 100);
+        //     console.log('dd'+timer)
+            
+        // };
+    var throttleV2 = function (fn, delay, mustRunDelay) {
+        var timer = null;
+        var t_start;
+        return function () {
+            var context = this, args = arguments, t_curr = +new Date();
+            clearTimeout(timer);
+            if (!t_start) {
+                t_start = t_curr;
+            }
+            if (t_curr - t_start >= mustRunDelay) {
+                fn.apply(context, args);
+                t_start = t_curr;
+            }
+            else {
+                timer = setTimeout(function () {
+                    fn.apply(context, args);
+                }, delay);
+            }
+        };
+    };
+    </script>
+</body>
+
+</html>
